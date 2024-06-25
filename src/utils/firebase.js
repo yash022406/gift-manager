@@ -1,11 +1,13 @@
 import { initializeApp } from "firebase/app";
-import {getAuth} from 'firebase/auth'
+import { getAuth } from 'firebase/auth';
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  collection,
+  getFirestore,
+  getDocs
+} from 'firebase/firestore';
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCTXAmuw9FFiA2AvM2WaR0KEOxer1vtbI4",
   authDomain: "giftmanagement-9f7f3.firebaseapp.com",
@@ -20,4 +22,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 const analytics = getAnalytics(app);
-export default app 
+
+// Initialize Firestore
+export const db = getFirestore(app);
+
+// Get a reference to the collection
+// const colRef = collection(db, "users");
+
+// Fetch documents from the collection
+// getDocs(colRef)
+//   .then((snapshot) => {
+//     let users = [];
+//     snapshot.docs.forEach(doc => {
+//       users.push({ ...doc.data(), id: doc.id });
+//     });
+//     console.log(users);
+//   })
+//   .catch(error => {
+//     console.error("Error fetching documents: ", error);
+//   });
+
+export default app;

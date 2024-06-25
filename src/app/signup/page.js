@@ -1,7 +1,10 @@
 "use client"
 import { useState } from 'react';
-import { UserAuth } from '@/utils/AuthContext';
+import { UserAuth } from '../../utils/AuthContext';
 import { useRouter } from 'next/navigation';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../../utils/firebase'; // Ensure you have the firestore instance exported from your firebase config file
+
 export default function Signup() {
   const [formData, setFormData] = useState({
     name: '',
@@ -11,7 +14,7 @@ export default function Signup() {
     password: '',
     confirmPassword: '',
   });
-  const {createUser} = UserAuth()
+  const {createUser} = UserAuth();
   const router = useRouter();
 
   const [errors, setErrors] = useState({});
@@ -42,22 +45,27 @@ export default function Signup() {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      
-      e.preventDefault()
-      try{
-        await createUser(formData.email, formData.password)
-        router.push('/dashboard');
-      }catch(e){
+      try {
+        const userCredential = await createUser(formData.email, formData.password);
+        const user = userCredential.user;
 
+        // Save user data to Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          city: formData.city,
+        });
+
+        router.push('/dashboard');
+        console.log(formData, "user added successfully");
+      } catch (e) {
         console.log(e);
       }
-      console.log(formData, "user added successfully");
     } else {
       setErrors(validationErrors);
     }
   };
-
-  const resent_apiKey = "re_SbRHsHaf_2gR5ZxPqYCevBDL11fEntixf"
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
