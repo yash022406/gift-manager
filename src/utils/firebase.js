@@ -6,6 +6,9 @@ import {
   getFirestore,
   getDocs
 } from 'firebase/firestore';
+import {
+  getDatabase, ref, child, get, set
+} from 'firebase/database'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -25,6 +28,7 @@ const analytics = getAnalytics(app);
 
 // Initialize Firestore
 export const db = getFirestore(app);
+export const realdb = getDatabase(app)
 
 // Get a reference to the collection
 // const colRef = collection(db, "users");
