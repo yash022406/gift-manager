@@ -1,57 +1,61 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState, useContext } from 'react';
 import { 
-     createUserWithEmailAndPassword,
-     signInWithEmailAndPassword,
-     signOut 
-    } from 'firebase/auth'
-import { auth } from './firebase';
-import { useContext } from 'react';
-import { GoogleAuthProvider,
-         signInWithPopup,
-         signInWithRedirect,
-         onAuthStateChanged
-        } from "firebase/auth";
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    GoogleAuthProvider,
+    signInWithPopup,
+    sendEmailVerification,
+    onAuthStateChanged
+} from 'firebase/auth';
+import { auth } from '../utils/firebase';
 
-const UserContext = createContext({}) 
+const UserContext = createContext({});
 
-export const AuthContextProvider = ( {children} ) => {
-    const [user,setUser] = useState({})
-    
- 
-    const createUser = (email,password) => {
-        return createUserWithEmailAndPassword(auth,email,password)
-    }
+export const AuthContextProvider = ({ children }) => {
+    const [user, setUser] = useState({});
 
-    const signIn = (email,password) => {
-        return signInWithEmailAndPassword(auth,email,password)
-    }
+    const createUser = async (email, password) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            await sendEmailVerification(user);
+            console.log("Successfully sent an email to user for verification.");
+        } catch (error) {
+            console.error("Error sending email verification:", error.message);
+        }
+    };
+
+    const signIn = (email, password) => {
+        return signInWithEmailAndPassword(auth, email, password);
+    };
 
     const googleSignIn = () => {
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth,provider);
-    }
+        return signInWithPopup(auth, provider);
+    };
 
     const logout = () => {
-        return signOut(auth)   
-    }
+        return signOut(auth);
+    };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth,(currentUser) => {
-            console.log(currentUser)
-            setUser(currentUser)
-        })
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            console.log(currentUser);
+            setUser(currentUser);
+        });
         return () => {
             unsubscribe();
         };
-    },[])
+    }, []);
 
-    return(
-        <UserContext.Provider value = {{createUser ,googleSignIn, user , logout , signIn}} >
-        {children}
+    return (
+        <UserContext.Provider value={{ createUser, googleSignIn, user, logout, signIn }}>
+            {children}
         </UserContext.Provider>
-    )
+    );
+};
 
-}
 export const UserAuth = () => {
-    return useContext(UserContext)
-}
+    return useContext(UserContext);
+};

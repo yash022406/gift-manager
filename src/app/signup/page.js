@@ -16,6 +16,7 @@ export default function Signup() {
   });
   const {createUser} = UserAuth();
   const router = useRouter();
+  const {user} = UserAuth();
 
   const [errors, setErrors] = useState({});
 
@@ -46,8 +47,11 @@ export default function Signup() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const userCredential = await createUser(formData.email, formData.password);
-        const user = userCredential.user;
+        router.push('/login');
+        await createUser(formData.email, formData.password);
+        alert("Verification email sent to your EmailID. Please verify your EmailID.")
+
+
 
         // Save user data to Firestore
         await setDoc(doc(db, 'users', user.uid), {
@@ -57,7 +61,10 @@ export default function Signup() {
           city: formData.city,
         });
 
-        router.push('/dashboard');
+        // Display the alert message and then redirect to login
+
+
+
         console.log(formData, "user added successfully");
       } catch (e) {
         console.log(e);
