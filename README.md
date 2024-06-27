@@ -20,6 +20,7 @@ Day 3:
 Day 4:
   Added Verify Email for Authentication. User is provided with a link to verify EmailID.
   Error Handling at different point of Authentication.
+
   <img width="720" alt="Screenshot 2024-06-28 at 12 42 30 AM" src="https://github.com/yash022406/gift-manager/assets/73089380/d51d7202-b778-4098-8b18-7ce7112896c6">
 
 *More fields are to be added soon.
