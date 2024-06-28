@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { realdb } from "../../utils/firebase";
 import { ref, push, set } from "firebase/database";
 import { UserAuth } from "../../utils/AuthContext";
-
+import { generateToken } from "../../utils/firebase";
 
 export default function EventForm({ closeEventForm }) {
   // const RESEND_API_KEY = "re_SJFyFuq5_QGKdeZ8NmpqFnQotPbR7bKjr";
   // const resend = new Resend(RESEND_API_KEY);
-  console.log(Get)
+
   const { user } = UserAuth();
   const userEmail = user?.email;
   const [formData, setFormData] = useState({
@@ -19,7 +19,6 @@ export default function EventForm({ closeEventForm }) {
     participantsCount: "",
     participants: [],
   });
-
   const handleChange = (e) => {
     setFormData({
       ...formData,

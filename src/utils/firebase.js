@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
 import { getAnalytics } from "firebase/analytics";
+// import { getMessaging, getToken } from "firebase/messaging";
 import {
   collection,
   getFirestore,
@@ -23,8 +24,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
-const analytics = getAnalytics(app);
 
 // Initialize Firestore
 export const db = getFirestore(app);

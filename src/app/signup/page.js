@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { UserAuth } from '../../utils/AuthContext';
 import { useRouter } from 'next/navigation';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../utils/firebase'; // Ensure you have the firestore instance exported from your firebase config file
+import { ref, set, push } from 'firebase/database';
+import { realdb } from '../../utils/firebase'; // Ensure you have the Realtime Database instance imported
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -14,9 +14,10 @@ export default function Signup() {
     password: '',
     confirmPassword: '',
   });
-  const {createUser} = UserAuth();
+  const { createUser } = UserAuth();
+  const { user } = UserAuth();
+  const userEmail = user?.email;
   const router = useRouter();
-  const {user} = UserAuth();
 
   const [errors, setErrors] = useState({});
 
@@ -47,27 +48,28 @@ export default function Signup() {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       try {
-        router.push('/login');
+        // Create the user in Firebase Authentication
         await createUser(formData.email, formData.password);
-        alert("Verification email sent to your EmailID. Please verify your EmailID.")
+        const newUserRef = push(ref(realdb, `users`));
 
 
-
-        // Save user data to Firestore
-        await setDoc(doc(db, 'users', user.uid), {
-          name: formData.name,
+        const userData = {
+          id: formData.email,
           email: formData.email,
-          phone: formData.phone,
+          name: formData.name,
           city: formData.city,
-        });
+          phoneNumber: formData.phone,
+          wallet: 5000
+        };
 
-        // Display the alert message and then redirect to login
-
-
-
+        await set(newUserRef, userData);
+        
+        alert('Verification email sent to your EmailID. Please verify your EmailID.');
         console.log(formData, "user added successfully");
+        router.push('/login');
       } catch (e) {
-        console.log(e);
+        console.error("Error during signup:", e);
+        alert("An error occurred during signup. Please try again.");
       }
     } else {
       setErrors(validationErrors);
