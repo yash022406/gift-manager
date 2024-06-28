@@ -23,4 +23,10 @@ Day 4:
 
   <img width="720" alt="Screenshot 2024-06-28 at 12 42 30 AM" src="https://github.com/yash022406/gift-manager/assets/73089380/d51d7202-b778-4098-8b18-7ce7112896c6">
 
+Day 5: 
+  User list added to Realtime Database.
+  Dynamic Event Page added for different events, user is able to see participants available in the event. And have an option to send gift. 
+  Send gift modal added, user can set the amount to be sent to a particular attendee.
+
+  
 *More fields are to be added soon.
