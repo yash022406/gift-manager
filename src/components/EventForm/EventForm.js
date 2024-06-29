@@ -26,6 +26,7 @@ export default function EventForm({ closeEventForm }) {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -46,10 +47,21 @@ export default function EventForm({ closeEventForm }) {
           return acc;
         }, {})
       };
-
-      // Set the data for the new event
       await set(newEventRef, eventData);
-
+     
+      // Set the data for the new event
+      const response = await fetch("/api/emails", { method: "POST" });
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+  
+      }
+      // console.log(data)
+      
+      // if (!response.ok) {
+      //   throw new Error(data.error || 'Failed to send email');
+      // }
 
       console.log("Event saved successfully", eventData);
       closeEventForm();

@@ -38,6 +38,7 @@ export default function Dashboard() {
             off(eventsRef, 'value', onEventsChange);
         };
     }, []);
+    
 
     const openEventsForm = () => {
         setEventForm(true);
@@ -46,16 +47,6 @@ export default function Dashboard() {
     const closeEventForm = () => {
         setEventForm(false);
     }
-
-    const handleLogout = async () => {
-        try {
-            await logout();
-            router.push('/');
-            console.log('You are logged out.');
-        } catch (e) {
-            console.log(e);
-        }
-    };
 
     return (
         <div className="flex flex-col bg-black">
@@ -66,10 +57,10 @@ export default function Dashboard() {
             </div>
             <div className="w-[80%] mx-auto mt-8">
                 <h2 className="text-2xl font-semibold mb-4">Upcoming Events</h2>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-2">
                     {events.length > 0 ? (
-                        <div className="grid  gap-4">
-                            {events.map((event) => (
+                        <div className="flex flex-row gap-4">
+                            {events?.map((event) => (
                                 event?.createdBy === user?.email &&
                                 <Link href={`/dashboard/${event.id}`} >
                                     
@@ -80,7 +71,7 @@ export default function Dashboard() {
                                         <p>End: {new Date(event.eventEndingTime).toLocaleString()}</p>
                                         <p className="mt-2">Participants:</p>
                                         <ul className="list-disc list-inside">
-                                            {Object.values(event.participants).map((participant, index) => (
+                                            {event.participants && Object.values(event.participants).map((participant, index) => (
                                                 <li key={index}>{participant.name} ({participant.email})</li>
                                             ))}
                                         </ul>
@@ -92,9 +83,9 @@ export default function Dashboard() {
                         <p>No events found. Create a new event to get started!</p>
                     )}
                     {events.length > 0 ? (
-                        events.map((event) => (
-                            <div className="grid gap-4" key={event.id}>
-                                {Object.values(event.participants).map((participant, index) => (
+                        events?.map((event) => (
+                            <div className="flex gap-4 flex-wrap" key={event.id}>
+                                {event.participants && Object.values(event.participants).map((participant, index) => (
                                     participant.email === user?.email &&
                                     <Link href={`/dashboard/${event.id}`} >
                                         <div className="border border-[#a4a3a3] rounded-lg p-4">
@@ -103,7 +94,7 @@ export default function Dashboard() {
                                             <p>End: {new Date(event.eventEndingTime).toLocaleString()}</p>
                                             <p className="mt-2">Participants:</p>
                                             <ul className="list-disc list-inside">
-                                                {Object.values(event.participants).map((participant, index) => (
+                                                {event.participants && Object.values(event.participants).map((participant, index) => (
                                                     <li key={index}>{participant.name} ({participant.email})</li>
                                                 ))}
                                             </ul>

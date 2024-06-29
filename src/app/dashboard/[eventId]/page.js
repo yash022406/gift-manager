@@ -15,6 +15,7 @@ const EventDetail = ({ params }) => {
     const [amount, setAmount] = useState('');
     const [selectedParticipant, setSelectedParticipant] = useState(null);
     const [isEventTime, setIsEventTime] = useState(false);
+    const [closeEvent, setCloseEvent] = useState(true)
 
   useEffect(() => {
     if (eventId) {
@@ -84,7 +85,8 @@ const EventDetail = ({ params }) => {
             sentBy: userEmail,
             eventName: event.eventName,
             sentTo: selectedParticipant.email,
-            amount: amount
+            amount: amount,
+            time: new Date().toISOString()
         }
         await set(newTransactionRef, transactionData);
   
@@ -105,7 +107,7 @@ const EventDetail = ({ params }) => {
     const now = new Date().getTime();
     const startTime = new Date(eventData.eventStartingTime).getTime();
     const endTime = new Date(eventData.eventEndingTime).getTime();
-    setIsEventTime(now >= startTime && now <= endTime);
+    setIsEventTime(now >= startTime && now <= endTime && closeEvent);
   };
 
   if (loading) {
@@ -181,6 +183,7 @@ const EventDetail = ({ params }) => {
           </table>
         </div>
       </div>
+      <button onClick={() => setCloseEvent(false)} className='p-2 rounded-lg mb-40 border border-red-500 bg-red-950 hover:bg-red-500 w-40 mx-auto'>Close event</button>
       { isModalOpen && <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -30,7 +30,9 @@ Day 5:
 
 Day 6: 
   Transactions are possible in event timing and value updates in the backend also. 
+  Added transactions tab which shows the till date transactions of the user.
   Created transaction table with all the transaction details stored.
+  Added Top Users, Recieved-Contributed tabs, with proper data tables.
 
   
 *More fields are to be added soon.
