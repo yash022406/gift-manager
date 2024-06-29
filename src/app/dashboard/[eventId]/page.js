@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { ref, get, update } from 'firebase/database';
+import { ref, get, update, set, push } from 'firebase/database';
 import { realdb } from '../../../utils/firebase';
 import { UserAuth } from '../../../utils/AuthContext';
 import Modal from '../../../components/SendGiftModal';
 const EventDetail = ({ params }) => {
     const { user } = UserAuth();
     const { eventId } = params;
+    const userEmail = user?.email;
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -44,29 +45,49 @@ const EventDetail = ({ params }) => {
       alert("Please enter a valid amount");
       return;
     }
-
+  
     try {
-      const senderRef = ref(realdb, `users/${user.email}`);
-      const recipientRef = ref(realdb, `users/${selectedParticipant.email}`);
-
-      const senderSnapshot = await get(senderRef);
-      const recipientSnapshot = await get(recipientRef);
-
-      if (senderSnapshot.exists() && recipientSnapshot.exists()) {
-        const senderData = senderSnapshot.val();
-        const recipientData = recipientSnapshot.val();
-
-        if (senderData.wallet < amount) {
+      const senderEmail = userEmail;
+      const recipientEmail = selectedParticipant.email;
+  
+      const usersRef = ref(realdb, 'users');
+      const usersSnapshot = await get(usersRef);
+  
+      if (usersSnapshot.exists()) {
+        const users = usersSnapshot.val();
+        const sender = Object.entries(users).find(([_, u]) => u.email === senderEmail);
+        const recipient = Object.entries(users).find(([_, u]) => u.email === recipientEmail);
+  
+        if (!sender || !recipient) {
+          alert("Sender or recipient not found");
+          return;
+        }
+  
+        const [senderId, senderData] = sender;
+        const [recipientId, recipientData] = recipient;
+  
+        if (senderData.wallet < parseFloat(amount)) {
           alert("Insufficient funds");
           return;
         }
-
-        const updatedSenderWallet = senderData.wallet - amount;
-        const updatedRecipientWallet = recipientData.wallet + amount;
-
-        await update(senderRef, { wallet: updatedSenderWallet });
-        await update(recipientRef, { wallet: updatedRecipientWallet });
-
+  
+        const updatedSenderWallet = senderData.wallet - parseFloat(amount);
+        const updatedRecipientWallet = recipientData.wallet + parseFloat(amount);
+  
+        const updates = {};
+        updates[`users/${senderId}/wallet`] = updatedSenderWallet;
+        updates[`users/${recipientId}/wallet`] = updatedRecipientWallet;
+  
+        await update(ref(realdb), updates);
+        const newTransactionRef = push(ref(realdb, 'transactions'))
+        const transactionData = {
+            sentBy: userEmail,
+            eventName: event.eventName,
+            sentTo: selectedParticipant.email,
+            amount: amount
+        }
+        await set(newTransactionRef, transactionData);
+  
         alert("Gift sent successfully!");
         setIsModalOpen(false);
       } else {
@@ -74,9 +95,10 @@ const EventDetail = ({ params }) => {
       }
     } catch (error) {
       console.error("Error sending gift:", error);
-      alert("An error occurred while sending the gift. Please try again.");
+      alert(`An error occurred while sending the gift: ${error.message}`);
     }
   };
+
 
 
   const checkEventTime = (eventData) => {
@@ -127,7 +149,7 @@ const EventDetail = ({ params }) => {
             </thead>
             <tbody>
               {event.participants && Object.values(event.participants).map((participant, index) => (
-                participant.name===user?.email ? (
+                participant.email!==userEmail ? (
                 <tr key={index} className={index % 2 === 0 ? 'bg-[#262626]' : 'bg-[#303030]'}>
                   <td className="px-4 py-2">{participant.name}</td>
                   <td className="px-4 py-2">{participant.email}</td>
@@ -145,7 +167,8 @@ const EventDetail = ({ params }) => {
                     <td className="px-4 py-2">{event.createdBy}</td>
                     <td className="px-4 py-2">
                       <button onClick={() => {
-                        setSelectedParticipant(participant);
+                        console.log(participant)
+                        setSelectedParticipant({email: event.createdBy, name: "Organiser"});
                         setIsModalOpen(true);
                     }} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
                         Send Gift

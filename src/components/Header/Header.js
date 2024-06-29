@@ -10,6 +10,7 @@ export default function Header() {
     const { logout } = UserAuth();
     const router = useRouter();
     const {user} = UserAuth();
+    const email = user?.email;
     const [users, setUsers] = useState()
     const [selectedUser, setSelectedUser] = useState(null);
 
@@ -37,7 +38,7 @@ export default function Header() {
     }, [user]);
 
     useEffect(() => {
-        const user = users?.find(user => user.email === user.email);
+        const user = users?.find(user => user.email === email);
         setSelectedUser(user);
       }, [users]);
       console.log(selectedUser)

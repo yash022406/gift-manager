@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import './EventForm/overlay.css'
 const Modal = ({ isOpen, onClose, onSubmit, amount, setAmount }) => {
   if (!isOpen) return null;
-  console.log("this is modal")
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -45,7 +44,7 @@ const Modal = ({ isOpen, onClose, onSubmit, amount, setAmount }) => {
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full px-2 py-1 border rounded"
+              className="w-full px-2 py-1 border rounded bg-[#181818] outline-none"
               required
             />
           </label>

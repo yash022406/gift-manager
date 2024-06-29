@@ -28,5 +28,9 @@ Day 5:
   Dynamic Event Page added for different events, user is able to see participants available in the event. And have an option to send gift. 
   Send gift modal added, user can set the amount to be sent to a particular attendee.
 
+Day 6: 
+  Transactions are possible in event timing and value updates in the backend also. 
+  Created transaction table with all the transaction details stored.
+
   
 *More fields are to be added soon.
