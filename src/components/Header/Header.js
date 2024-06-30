@@ -42,7 +42,6 @@ export default function Header() {
         const user = users?.find(user => user.email === email);
         setSelectedUser(user);
       }, [users]);
-      console.log(selectedUser)
 
     const handleLogout = async () => {
         try {

@@ -1,26 +1,24 @@
-import Invitation from "../../../emails/Invitation";
-import { Resend } from "resend";
+import { NextResponse } from 'next/server';
+import emailjs from '@emailjs/nodejs';
 
-const resend = new Resend("re_Y5X7RbHJ_BshEwGmx5ghMk7AV6ShAy1iK");
+emailjs.init({
+  publicKey: "fPL_SDe29nZUcHUdi",
+  privateKey: "etLlEX546G7NTw8C5aAJp", // Use environment variable
+});
 
 export async function POST(req) {
   try {
+    const templateParams = {
+      to_email: "raghav4u03@gmail.com",
+      // Add other template parameters as needed
+    };
 
-    const result = await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: ['yashsain.2406@gmail.com', '20ucc119@lnmiit.ac.in'],
-      subject: 'INVITATION: GiftManager Event',
-      react: Invitation(),
-    });
-    return new Response(JSON.stringify(result), { 
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const response = await emailjs.send('service_3v512os', 'template_l74q4n3', templateParams, options);
+
+    console.log('SUCCESS!', response.status, response.text);
+    return NextResponse.json({ message: 'Email sent successfully.' }, { status: 200 });
   } catch (error) {
-    console.error('Error sending email:', error);
-    return new Response(JSON.stringify({ error: error.message }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('Detailed error:', error);
+    return NextResponse.json({ message: 'Failed to send email.', error: error.toString() }, { status: 500 });
   }
 }

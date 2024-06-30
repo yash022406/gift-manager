@@ -5,6 +5,7 @@ import { realdb } from "../../utils/firebase";
 import { ref, push, set } from "firebase/database";
 import { UserAuth } from "../../utils/AuthContext";
 import { generateToken } from "../../utils/firebase";
+import emailjs from '@emailjs/browser';
 
 export default function EventForm({ closeEventForm }) {
   // const RESEND_API_KEY = "re_SJFyFuq5_QGKdeZ8NmpqFnQotPbR7bKjr";
@@ -12,6 +13,7 @@ export default function EventForm({ closeEventForm }) {
 
   const { user } = UserAuth();
   const userEmail = user?.email;
+
   const [formData, setFormData] = useState({
     eventName: "",
     startTime: "",
@@ -45,18 +47,34 @@ export default function EventForm({ closeEventForm }) {
             email: participant.email
           };
           return acc;
-        }, {})
+        }, {}),
+
       };
+      
       await set(newEventRef, eventData);
+      const participants = Object.values(eventData.participants)
+      const emails = participants.map(participant => participant.email)
+      console.log(emails)
      
       // Set the data for the new event
-      const response = await fetch("/api/emails", { method: "POST" });
-      const data = await response.json();
+      // const response = await fetch("/api/emails", { method: "POST" });
+      // console.log(await response.json())
       
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send email');
-  
-      }
+      const templateParams = {
+        to_Email: emails,
+        event_name: formData.eventName,
+        start_time: new Date(formData.startTime).toLocaleString(),
+        end_time: new Date(formData.endTime).toLocaleString(),
+
+    }
+
+      emailjs.send("service_3v512os", "template_l74q4n3", templateParams, "fPL_SDe29nZUcHUdi")
+        .then((response) => {
+            console.log("success", response);
+        }).catch((error) => {
+            console.log("error", error);
+        })
+      
       // console.log(data)
       
       // if (!response.ok) {
