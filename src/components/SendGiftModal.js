@@ -3,8 +3,8 @@
 import React from 'react';
 import { useEffect } from 'react';
 import './EventForm/overlay.css'
-const Modal = ({ isOpen, onClose, onSubmit, amount, setAmount }) => {
-  if (!isOpen) return null;
+const Modal = ({ onClose, onSubmit, amount, setAmount }) => {
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
