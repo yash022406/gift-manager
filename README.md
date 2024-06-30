@@ -1,3 +1,5 @@
+PS : Registering is compulsory for a user to enter in an event, I assumed that every user has an initial amount of 5000, with the help of which he/she can do transactions. With the help of datagraphs, user can see his/her daily transactions increment/decrement.
+
 Day 1: 
   Created Login and Signup page with proper validations in input fields.
   Authenticated user with Firebase Authentication facility.

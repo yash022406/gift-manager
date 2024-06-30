@@ -72,6 +72,11 @@ export default function Header() {
                     Transactions
                     </div>
                 </Link>
+                <Link href={'/DataChart'}>
+                    <div className='text-lg font-semibold mr-4 hover:text-green-500'>
+                    Data Chart
+                    </div>
+                </Link>
                 <div className="flex gap-1 px-2 py-2 border border-[#a4a3a3] rounded-lg">
                     <BsCoin size={24} />
                     <span className='font-bold text-green-500'>{selectedUser?.wallet}</span>
