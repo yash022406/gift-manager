@@ -60,9 +60,9 @@ export default function Dashboard() {
                 <div className="flex flex-row flex-wrap gap-2">
                     {events.length > 0 ? (
                         <div className="flex flex-row gap-4">
-                            {events?.map((event) => (
+                            {events?.map((event, index) => (
                                 event?.createdBy === user?.email &&
-                                <Link href={`/dashboard/${event.id}`} >
+                                <Link key={index} href={`/dashboard/${event.id}`} >
                                     
                                     <div className="border border-[#a4a3a3] rounded-lg p-4">
                                         <h3 className="text-xl font-semibold mb-2">{event.eventName}</h3>
@@ -87,7 +87,7 @@ export default function Dashboard() {
                             <div className="flex gap-4 flex-wrap" key={event.id}>
                                 {event.participants && Object.values(event.participants).map((participant, index) => (
                                     participant.email === user?.email &&
-                                    <Link href={`/dashboard/${event.id}`} >
+                                    <Link key={index} href={`/dashboard/${event.id}`} >
                                         <div className="border border-[#a4a3a3] rounded-lg p-4">
                                             <h3 className="text-xl font-semibold mb-2">{event.eventName}</h3>
                                             <p>Start: {new Date(event.eventStartingTime).toLocaleString()}</p>

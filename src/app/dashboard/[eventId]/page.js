@@ -38,7 +38,7 @@ const EventDetail = ({ params }) => {
       setLoading(false);
       setError("No event ID provided");
     }
-  }, [eventId]);
+  }, [eventId, checkEventTime]);
 
   const handleSendGift = async (e) => {
     e.preventDefault();
@@ -122,13 +122,13 @@ const EventDetail = ({ params }) => {
     return <div className="flex justify-center items-center h-screen bg-black text-white">No event found</div>;
   }
 
-//   if (!isEventTime) {
-//     return (
-//       <div className="flex justify-center items-center h-screen bg-black text-white">
-//         Please join the event according to timings. Event features are not available right now.
-//       </div>
-//     );
-//   }
+  if (!isEventTime) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-black text-white">
+        Please join the event according to timings. Event features are not available right now.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-black text-white mt-6 px-[5%]">
