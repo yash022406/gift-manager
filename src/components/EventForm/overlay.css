@@ -22,3 +22,9 @@
   justify-content: center;
   align-items: center;
 }
+
+@media screen and (min-width: 720px) {
+  .modal-content {
+    width: 90vw;
+  }
+}

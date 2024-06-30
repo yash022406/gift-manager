@@ -38,7 +38,7 @@ const EventDetail = ({ params }) => {
       setLoading(false);
       setError("No event ID provided");
     }
-  }, [eventId, checkEventTime]);
+  }, [eventId]);
 
   const handleSendGift = async (e) => {
     e.preventDefault();

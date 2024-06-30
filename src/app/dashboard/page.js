@@ -57,16 +57,16 @@ export default function Dashboard() {
             </div>
             <div className="w-[80%] mx-auto mt-8">
                 <h2 className="text-2xl font-semibold mb-4">Upcoming Events</h2>
-                <div className="flex flex-row flex-wrap gap-2">
+                <div className="flex flex-col gap-2">
                     {events.length > 0 ? (
-                        <div className="flex flex-row gap-4">
+                        <div className="flex flex-col gap-4">
                             {events?.map((event, index) => (
                                 event?.createdBy === user?.email &&
                                 <Link key={index} href={`/dashboard/${event.id}`} >
                                     
                                     <div className="border border-[#a4a3a3] rounded-lg p-4">
                                         <h3 className="text-xl font-semibold mb-2">{event.eventName}</h3>
-                                        <h3 className="text-md font-semibold mb-2 p-1 border rounded-lg">Organiser: {event.createdBy}</h3>
+                                        <h3 className="text-md font-semibold mb-2">Organiser: {event.createdBy}</h3>
                                         <p>Start: {new Date(event.eventStartingTime).toLocaleString()}</p>
                                         <p>End: {new Date(event.eventEndingTime).toLocaleString()}</p>
                                         <p className="mt-2">Participants:</p>
@@ -84,12 +84,13 @@ export default function Dashboard() {
                     )}
                     {events.length > 0 ? (
                         events?.map((event) => (
-                            <div className="flex gap-4 flex-wrap" key={event.id}>
+                            <div className="flex gap-4 flex-col" key={event.id}>
                                 {event.participants && Object.values(event.participants).map((participant, index) => (
                                     participant.email === user?.email &&
                                     <Link key={index} href={`/dashboard/${event.id}`} >
                                         <div className="border border-[#a4a3a3] rounded-lg p-4">
                                             <h3 className="text-xl font-semibold mb-2">{event.eventName}</h3>
+                                            <h3 className="text-md font-semibold mb-2">Organiser: {event.createdBy}</h3>
                                             <p>Start: {new Date(event.eventStartingTime).toLocaleString()}</p>
                                             <p>End: {new Date(event.eventEndingTime).toLocaleString()}</p>
                                             <p className="mt-2">Participants:</p>
