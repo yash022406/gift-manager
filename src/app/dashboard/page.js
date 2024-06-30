@@ -52,7 +52,7 @@ export default function Dashboard() {
         <div className="flex flex-col bg-black">
            
             <div className="flex justify-between mt-8 w-[80%] mx-auto ">
-                <p className="text-4xl font-semibold color-text">Hello, {user?.email}</p>
+                <p className="md:text-4xl text-2xl font-semibold color-text">Hello, {user?.email}</p>
                 <button onClick={openEventsForm} className='px-3 py-2 rounded-lg border border-[#a4a3a3] font-bold'>Create New Event</button>
             </div>
             <div className="w-[80%] mx-auto mt-8">
