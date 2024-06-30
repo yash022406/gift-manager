@@ -55,7 +55,7 @@ export default function Header() {
 
     return (
         <div className="w-full flex justify-between px-10 items-center border-b border-[#a4a3a3] py-3">
-            <p className="text-xl font-semibold">Gift Manager</p>
+            <Link href="/dashboard"><p className="text-xl font-semibold">Gift Manager</p></Link>
             <div className="flex gap-4 items-center">
             <Link href={'/recieved-contributed'}>
                     <div className='text-lg font-semibold mr-4 hover:text-green-500'>
